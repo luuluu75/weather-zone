@@ -1,3 +1,5 @@
+//Function to display list of previous search//
+
 function createCityList(citySearchList) {
     $("#city-list").empty();
   
@@ -20,20 +22,21 @@ function createCityList(citySearchList) {
   
   function populateCityWeather(city, citySearchList) {
     createCityList(citySearchList);
-  
-    var queryURL ="https://api.openweathermap.org/data/2.5/weather?&units=imperial&appid=885e9149105e8901c9809ac018ce8658&q=" + city;
-    var queryURL2 ="https://api.openweathermap.org/data/2.5/forecast?&units=imperial&appid=885e9149105e8901c9809ac018ce8658&q=" + city;
+
+    var queryURL ="https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
+    var queryURL2 ="https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
     var latitude;
     var longitude;
+   
   
     $.ajax({
-      url: queryURL,
-      method: "GET"
+      method: "GET",
     })
       // Store all of the retrieved data inside of an object called "weather"
       .then(function(weather) {
         // Log the queryURL
         console.log(queryURL);
+    
   
         // Log the resulting object
         console.log(weather);
@@ -48,23 +51,23 @@ function createCityList(citySearchList) {
   
         var cityName = $("<h3>").text(weather.name);
         $("#city-name").prepend(cityName);
+        
+        var fToCelsius = ((weather.main.temp + -32) *5/9);
   
         var weatherIcon = $("<img>");
+    
         weatherIcon.attr(
-          "src",
-          "https://openweathermap.org/img/w/" + weather.weather[0].icon + ".png"
-        );
+          "src",  "https://openweathermap.org/img/w/" + weather.weather[0].icon + ".png");
         $("#current-icon").empty();
         $("#current-icon").append(weatherIcon);
-  
-        $("#current-temp").text("Temperature: " + weather.main.temp + " °F");
+        $("#current-temp").text("Temperature: " + fToCelsius + " °F")
         $("#current-humidity").text("Humidity: " + weather.main.humidity + "%");
         $("#current-wind").text("Wind Speed: " + weather.wind.speed + " MPH");
   
         latitude = weather.coord.lat;
         longitude = weather.coord.lon;
   
-        var queryURL3 = "https://api.openweathermap.org/data/2.5/uvi/forecast?&units=imperial&appid=885e9149105e8901c9809ac018ce8658&q=" + "&lat=" + latitude + "&lon=" + longitude;
+        var queryURL3 = "https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/uvi/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + "&lat=" + latitude + "&lon=" + longitude;
   
         $.ajax({
           url: queryURL3,
@@ -92,9 +95,7 @@ function createCityList(citySearchList) {
             for (var i = 6; i < forecast.list.length; i += 8) {
               // 6, 14, 22, 30, 38
               var forecastDate = $("<h5>");
-  
               var forecastPosition = (i + 2) / 8;
-  
               console.log("#forecast-date" + forecastPosition);
   
               $("#forecast-date" + forecastPosition).empty();
@@ -115,13 +116,9 @@ function createCityList(citySearchList) {
   
               console.log(forecast.list[i].weather[0].icon);
   
-              $("#forecast-temp" + forecastPosition).text(
-                "Temp: " + forecast.list[i].main.temp + " °F"
-              );
-              $("#forecast-humidity" + forecastPosition).text(
-                "Humidity: " + forecast.list[i].main.humidity + "%"
-              );
-  
+              
+              $("#forecast-temp" + forecastPosition).text("Temp: " + forecast.list[i].main.temp + " °C");
+              $("#forecast-humidity" + forecastPosition).text("Humidity: " + forecast.list[i].main.humidity + "%");
               $(".forecast").attr(
                 "style",
                 "background-color:dodgerblue; color:white"
@@ -147,7 +144,7 @@ function createCityList(citySearchList) {
     $("#forecast-weather").hide();
   
   
-  
+  //Event Listeners
     $("#search-button").on("click", function(event) {
       event.preventDefault();
       var city = $("#city-input")
