@@ -14,4 +14,4 @@
     - URL has been updated to return units in metrics.
 
 # Screen Shot
-    - Images/Weather App
+    - Images/Weather-App
