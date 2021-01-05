@@ -23,8 +23,8 @@ function createCityList(citySearchList) {
   function populateCityWeather(city, citySearchList) {
     createCityList(citySearchList);
 
-    var queryURL ="https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
-    var queryURL2 ="https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
+    var queryURL ="https://api.openweathermap.org/data/2.5/weather?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
+    var queryURL2 ="https://api.openweathermap.org/data/2.5/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
     var latitude;
     var longitude;
    
@@ -37,7 +37,6 @@ function createCityList(citySearchList) {
         // Log the queryURL
         console.log(queryURL);
     
-  
         // Log the resulting object
         console.log(weather);
   
@@ -52,7 +51,7 @@ function createCityList(citySearchList) {
         var cityName = $("<h3>").text(weather.name);
         $("#city-name").prepend(cityName);
         
-        var fToCelsius = ((weather.main.temp + -32) *5/9);
+        //var fToCelsius = (Math.round(weather.main.temp + -32) *5/9);
   
         var weatherIcon = $("<img>");
     
@@ -60,14 +59,14 @@ function createCityList(citySearchList) {
           "src",  "https://openweathermap.org/img/w/" + weather.weather[0].icon + ".png");
         $("#current-icon").empty();
         $("#current-icon").append(weatherIcon);
-        $("#current-temp").text("Temperature: " + fToCelsius + " °F")
+        $("#current-temp").text("Temperature: " + weather.main.temp + " °C")
         $("#current-humidity").text("Humidity: " + weather.main.humidity + "%");
         $("#current-wind").text("Wind Speed: " + weather.wind.speed + " MPH");
   
         latitude = weather.coord.lat;
         longitude = weather.coord.lon;
   
-        var queryURL3 = "https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/uvi/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + "&lat=" + latitude + "&lon=" + longitude;
+        var queryURL3 = "https://api.openweathermap.org/data/2.5/uvi/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + "&lat=" + latitude + "&lon=" + longitude;
   
         $.ajax({
           url: queryURL3,
