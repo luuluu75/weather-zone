@@ -23,20 +23,22 @@ function createCityList(citySearchList) {
   function populateCityWeather(city, citySearchList) {
     createCityList(citySearchList);
 
-    var queryURL ="https://api.openweathermap.org/data/2.5/weather?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
-    var queryURL2 ="https://api.openweathermap.org/data/2.5/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + city;
+    var queryURL ="https://api.openweathermap.org/data/2.5/weather?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8&q=" + city;
+    var queryURL2 ="https://api.openweathermap.org/data/2.5/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8&q=" + city;
     var latitude;
     var longitude;
    
   
     $.ajax({
-      method: "GET",
+      url: queryURL,
+      method: "GET"
     })
       // Store all of the retrieved data inside of an object called "weather"
       .then(function(weather) {
         // Log the queryURL
         console.log(queryURL);
     
+  
         // Log the resulting object
         console.log(weather);
   
@@ -50,8 +52,6 @@ function createCityList(citySearchList) {
   
         var cityName = $("<h3>").text(weather.name);
         $("#city-name").prepend(cityName);
-        
-        //var fToCelsius = (Math.round(weather.main.temp + -32) *5/9);
   
         var weatherIcon = $("<img>");
     
@@ -66,9 +66,9 @@ function createCityList(citySearchList) {
         latitude = weather.coord.lat;
         longitude = weather.coord.lon;
   
-        var queryURL3 = "https://api.openweathermap.org/data/2.5/uvi/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8=" + "&lat=" + latitude + "&lon=" + longitude;
+        var queryURL3 = "https://api.openweathermap.org/data/2.5/uvi/forecast?&units=metric&appid=fc3bb1ddcc682caffc3f81e0ded0efd8&q=" + "&lat=" + latitude + "&lon=" + longitude;
   
-        $.ajax({
+          $.ajax({
           url: queryURL3,
           method: "GET"
           // Store all of the retrieved data inside of an object called "uvIndex"
